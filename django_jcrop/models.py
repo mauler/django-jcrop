@@ -18,11 +18,6 @@ from StringIO import StringIO
 
 from simplejson import loads
 
-#img_temp = NamedTemporaryFile(delete=True)
-#img_temp.write(urllib2.urlopen(url).read())
-#img_temp.flush()
-#im.file.save(img_filename, File(img_temp))
-
 
 class ClearableFileInput(forms.ClearableFileInput):
 
@@ -43,7 +38,7 @@ class ClearableFileInput(forms.ClearableFileInput):
             sio.seek(0)
             size = len(sio.read())
             sio.seek(0)
-            f = InMemoryUploadedFile(sio, forig.name, name, "image/%s" % im.format.lower(), size, "utf-8")
+            f = InMemoryUploadedFile(sio, name, forig.name, "image/%s" % im.format.lower(), size, "utf-8")
             files[name] = f
 
         upload = super(ClearableFileInput, self).value_from_datadict(data, files, name)

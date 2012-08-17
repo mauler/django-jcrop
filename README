@@ -3,11 +3,6 @@ django-jcrop
 This a prototype, the code is working but not ideally (black magic present).
 
 
-javascript
-----------
-jQuery was replaced by django.jQuery
-
-
 requirements
 ------------
 easy-thumbnails

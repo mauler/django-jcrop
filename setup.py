@@ -15,6 +15,10 @@ setup(
     packages=['django_jcrop'],
     license='BSD',
     long_description=read('README'),
+    install_requires=[
+        'simplejson',
+        'easy_thumbnails',
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

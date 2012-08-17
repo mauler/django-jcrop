@@ -1,0 +1,6 @@
+recursive-include django_jcrop/templates *.html
+recursive-include django_jcrop/static *
+include LICENSE
+include AUTHORS
+include MANIFEST.in
+include README

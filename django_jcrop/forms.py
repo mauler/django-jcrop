@@ -6,11 +6,8 @@ except ImportError:
     from simplejson import loads
 
 from django.conf import settings
-from django.utils.html import escape, conditional_escape
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.files.storage import default_storage
-from django.utils.encoding import force_unicode
-from django.utils.safestring import mark_safe
 from django.template import Context
 from django.template.loader import get_template
 from django import forms
@@ -41,6 +38,12 @@ class ClearableFileInput(forms.ClearableFileInput):
                 "image/%s" % im.format.lower(), size, "utf-8"
             )
             files[name] = f
+            print files[name]
+            print files[name]
+            print files[name]
+            print files[name]
+            print files[name]
+            print files[name]
 
         upload = super(ClearableFileInput, self).value_from_datadict(data,
                                                                      files,
@@ -59,10 +62,6 @@ class ClearableFileInput(forms.ClearableFileInput):
 
 
 class JCropAdminImageWidget(ClearableFileInput):
-    template_with_initial = (u'<p class="file-upload">%s</p>'
-                            % ClearableFileInput.template_with_initial)
-    template_with_clear = (u'<span class="clearable-file-input">%s</span>'
-                           % ClearableFileInput.template_with_clear)
 
     class Media:
         js = (settings.STATIC_URL + "django_jcrop/js/jquery.Jcrop.min.js",)
@@ -71,50 +70,19 @@ class JCropAdminImageWidget(ClearableFileInput):
         )}
 
     def render(self, name, value, attrs=None):
-        substitutions = {
-            'initial_text': self.initial_text,
-            'input_text': self.input_text,
-            'clear_template': '',
-            'clear_checkbox_label': self.clear_checkbox_label,
-        }
-        template = u'%(input)s'
-        substitutions['input'] = super(forms.ClearableFileInput, self).render(
-            name, value, attrs
-        )
-
-        if value and hasattr(value, "url"):
-            template = self.template_with_initial
-            substitutions['input_name'] = name
-            substitutions['image_value'] = value
-            substitutions['image_url'] = value.url
-            substitutions['initial'] = (u'<a href="%s">%s</a>'
-                                        % (escape(value.url),
-                                           escape(force_unicode(value))))
-            #if not self.is_required:
-            checkbox_name = self.clear_checkbox_name(name)
-            checkbox_id = self.clear_checkbox_id(checkbox_name)
-            substitutions['clear_checkbox_name'] = conditional_escape(
-                checkbox_name
-            )
-            substitutions['clear_checkbox_id'] = conditional_escape(
-                checkbox_id
-            )
-            substitutions['clear'] = forms.CheckboxInput().render(
-                checkbox_name, False, attrs={'id': checkbox_id}
-            )
-            substitutions['clear_template'] = self.template_with_clear % \
-                    substitutions
-        else:
-            return mark_safe(template % substitutions)
-
         t = get_template("jcrop/jcrop_image_widget.html")
-        substitutions.update({
+        substitutions = {
+            "input_name": name,
+            "image_value": value,
             "JCROP_IMAGE_THUMBNAIL_DIMENSIONS": getattr(
                 settings, "JCROP_IMAGE_THUMBNAIL_DIMENSIONS", "62x62"
             ),
             "JCROP_IMAGE_WIDGET_DIMENSIONS": getattr(
                 settings, "JCROP_IMAGE_WIDGET_DIMENSIONS", "320x320"
             ),
-        })
+        }
         c = Context(substitutions)
-        return t.render(c)
+        clearable_input_render = super(ClearableFileInput, self).render(
+            name, value, attrs
+        )
+        return clearable_input_render + t.render(c)

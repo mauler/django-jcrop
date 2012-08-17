@@ -35,31 +35,17 @@
         $(".jcrop_panel.{{ input_name }}").slideUp('fast');
       }
     });
-    //$("#jcrop_crop_{{ input_name }}").change();
+    $("#jcrop_crop_{{ input_name }}").change();
   });
 })(jQuery)
 // ]]>
 </script>
 
-<div class="file-upload">
-  {% trans "Currently:" %}
-  <a href="{{ image_url }}">{{ image_url }}</a><br />
-  <img src="{% thumbnail image_value JCROP_IMAGE_THUMBNAIL_DIMENSIONS %}"
-       id="jcrop_preview_{{ input_name }}" />
-  <span class="clearable-file-input">
-    {{ clear }}
-    <label for="{{ clear_checkbox_id }}">{{ clear_checkbox_label }}</label>
-  </span>
-  <span class="clearable-file-input">
-    <input name="{{ input_name }}-crop" type="checkbox" id="jcrop_crop_{{ input_name }}" />
-    <label for="jcrop_crop_{{ input_name }}">{% trans "Crop" %}</label>
-  </span><br />
-  <span class="{{ input_name }} jcrop_panel" style="display: none">
-    <img src="{% thumbnail image_value JCROP_IMAGE_WIDGET_DIMENSIONS %}" 
-         id="jcrop_target_{{ input_name }}" />
-  </span><br />
-  {% trans "Upload:" %}{{ input }}
-  <input type="text" name="{{ input_name }}-original" value="{{ image_value }}"  />
-  <input type="text" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
-</div>
-
+<input name="{{ input_name }}-crop" type="checkbox" id="jcrop_crop_{{ input_name }}" />
+<label for="jcrop_crop_{{ input_name }}">{% trans "Crop" %}</label>
+<span class="{{ input_name }} jcrop_panel" style="display: none">
+  <img src="{% thumbnail image_value JCROP_IMAGE_WIDGET_DIMENSIONS %}" 
+       id="jcrop_target_{{ input_name }}" />
+</span><br />
+<input type="hidden" name="{{ input_name }}-original" value="{{ image_value }}"  />
+<input type="hidden" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />

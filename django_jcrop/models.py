@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
+"""Definition of JCropImageField with associated widget"""
 
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -41,9 +42,10 @@ class ClearableFileInput(forms.ClearableFileInput):
             sio.seek(0)
             size = len(sio.read())
             sio.seek(0)
-            f = InMemoryUploadedFile(sio, name, forig.name,
-                                     "image/%s" % im.format.lower(),
-                                     size, "utf-8")
+            f = InMemoryUploadedFile(
+                sio, name, forig.name,
+                "image/%s" % im.format.lower(), size, "utf-8"
+            )
             files[name] = f
 
         upload = super(ClearableFileInput, self).value_from_datadict(data,
@@ -69,8 +71,7 @@ class JCropAdminImageWidget(ClearableFileInput):
                            % ClearableFileInput.template_with_clear)
 
     class Media:
-        js = (settings.STATIC_URL + "django_jcrop/js/jquery.Jcrop.min.js",
-              settings.STATIC_URL + "django_jcrop/js/jquery.json-2.3.min.js", )
+        js = (settings.STATIC_URL + "django_jcrop/js/jquery.Jcrop.min.js",)
         css = {"all": (
             settings.STATIC_URL + "django_jcrop/css/jquery.Jcrop.css",
         )}

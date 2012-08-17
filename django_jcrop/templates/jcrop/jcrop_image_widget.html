@@ -5,6 +5,13 @@
 (function ($) {
   $(function () {
     var jcrop_api, boundx, boundy;
+    var update_input = function(c) {
+      $.extend(c, {
+        image_width: $('#jcrop_target_{{ input_name }}').width(),
+        image_height: $('#jcrop_target_{{ input_name }}').height()
+      })
+      $("#id_{{ input_name }}-crop-data").val(JSON.stringify(c))
+    };
     var crop = function() {
       $('#jcrop_target_{{ input_name }}').Jcrop({
           aspectRatio: 0,
@@ -16,14 +23,7 @@
         boundy = bounds[1];
         jcrop_api = this;
       });
-      var update_input = function(c) {
-        $.extend(c, {
-          image_width: $('#jcrop_target_{{ input_name }}').width(),
-          image_height: $('#jcrop_target_{{ input_name }}').height()
-        })
-        $("#id_{{ input_name }}-crop-data").val($.toJSON(c))
-      };
-      update_input()
+      update_input();
     }
     $("#jcrop_crop_{{ input_name }}").change(function () {
       if ($(this).is(":checked")) {
@@ -61,7 +61,5 @@
   {% trans "Upload:" %}{{ input }}
   <input type="hidden" name="{{ input_name }}-original" value="{{ image_value }}"  />
   <input type="hidden" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
-<!--    {{ JCROP_IMAGE_THUMBNAIL_DIMENSIONS }} |-->
-<!--    {{ JCROP_IMAGE_WIDGET_DIMENSIONS }}-->
 </div>
 

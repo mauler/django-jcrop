@@ -1,3 +1,3 @@
 #!/usr/bin/env python
 
-from .models import JCropAdminImageWidget
+from django_jcrop.models import JCropAdminImageWidget

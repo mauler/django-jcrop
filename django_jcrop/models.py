@@ -2,13 +2,12 @@
 #-*- coding:utf-8 -*-
 
 from django.conf import settings
-from django.contrib.admin.widgets import AdminFileWidget
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.files.storage import default_storage
 from django.db import models
 from django.template.loader import get_template
 from django.template import Context
-from django.utils.encoding import StrAndUnicode, force_unicode
+from django.utils.encoding import force_unicode
 from django.utils.html import escape, conditional_escape
 from django.utils.safestring import mark_safe
 from django import forms
@@ -22,15 +21,16 @@ from simplejson import loads
 class ClearableFileInput(forms.ClearableFileInput):
 
     def value_from_datadict(self, data, files, name):
-        if forms.CheckboxInput().value_from_datadict(data, files, "%s-crop" % name):
-            #{"x":26,"y":40,"x2":320,"y2":150,"w":294,"h":110}
+        if forms.CheckboxInput().value_from_datadict(data, files,
+                                                     "%s-crop" % name):
             forig = default_storage.open(data['%s-original' % name])
             im = Image.open(forig)
             w, h = im.size
             cdata = loads(data['%s-crop-data' % name])
             xr = 1. * w / cdata['image_width']
             yr = 1. * h / cdata['image_height']
-            box = (cdata['x'] * xr, cdata['y'] * yr, cdata['x2'] * xr, cdata['y2'] * yr)
+            box = (cdata['x'] * xr, cdata['y'] * yr,
+                   cdata['x2'] * xr, cdata['y2'] * yr)
             box = map(int, box)
             crop = im.crop(box)
             sio = StringIO()
@@ -38,10 +38,14 @@ class ClearableFileInput(forms.ClearableFileInput):
             sio.seek(0)
             size = len(sio.read())
             sio.seek(0)
-            f = InMemoryUploadedFile(sio, name, forig.name, "image/%s" % im.format.lower(), size, "utf-8")
+            f = InMemoryUploadedFile(sio, name, forig.name,
+                                     "image/%s" % im.format.lower(),
+                                     size, "utf-8")
             files[name] = f
 
-        upload = super(ClearableFileInput, self).value_from_datadict(data, files, name)
+        upload = super(ClearableFileInput, self).value_from_datadict(data,
+                                                                     files,
+                                                                     name)
         if not self.is_required and forms.CheckboxInput().value_from_datadict(
             data, files, self.clear_checkbox_name(name)):
             if upload:
@@ -49,7 +53,8 @@ class ClearableFileInput(forms.ClearableFileInput):
                 # checks the "clear" checkbox), we return a unique marker
                 # object that FileField will turn into a ValidationError.
                 return forms.FILE_INPUT_CONTRADICTION
-            # False signals to clear any existing value, as opposed to just None
+            # False signals to clear any existing value,
+            # as opposed to just None
             return False
         return upload
 
@@ -63,7 +68,9 @@ class JCropAdminImageWidget(ClearableFileInput):
     class Media:
         js = (settings.STATIC_URL + "django_jcrop/js/jquery.Jcrop.min.js",
               settings.STATIC_URL + "django_jcrop/js/jquery.json-2.3.min.js", )
-        css = {"all": (settings.STATIC_URL + "django_jcrop/css/jquery.Jcrop.css", )}
+        css = {"all": (
+            settings.STATIC_URL + "django_jcrop/css/jquery.Jcrop.css",
+        )}
 
     def render(self, name, value, attrs=None):
         substitutions = {
@@ -73,7 +80,8 @@ class JCropAdminImageWidget(ClearableFileInput):
             'clear_checkbox_label': self.clear_checkbox_label,
         }
         template = u'%(input)s'
-        substitutions['input'] = super(forms.ClearableFileInput, self).render(name, value, attrs)
+        substitutions['input'] = super(forms.ClearableFileInput,
+                                       self).render(name, value, attrs)
 
         if value and hasattr(value, "url"):
             template = self.template_with_initial
@@ -86,17 +94,28 @@ class JCropAdminImageWidget(ClearableFileInput):
             if not self.is_required:
                 checkbox_name = self.clear_checkbox_name(name)
                 checkbox_id = self.clear_checkbox_id(checkbox_name)
-                substitutions['clear_checkbox_name'] = conditional_escape(checkbox_name)
-                substitutions['clear_checkbox_id'] = conditional_escape(checkbox_id)
-                substitutions['clear'] = forms.CheckboxInput().render(checkbox_name, False, attrs={'id': checkbox_id})
-                substitutions['clear_template'] = self.template_with_clear % substitutions
+                substitutions['clear_checkbox_name'] = conditional_escape(
+                    checkbox_name
+                )
+                substitutions['clear_checkbox_id'] = conditional_escape(
+                    checkbox_id
+                )
+                substitutions['clear'] = forms.CheckboxInput().render(
+                    checkbox_name, False, attrs={'id': checkbox_id}
+                )
+                substitutions['clear_template'] = self.template_with_clear % \
+                        substitutions
         else:
             return mark_safe(template % substitutions)
 
         t = get_template("jcrop/jcrop_image_widget.html")
         substitutions.update({
-            "JCROP_IMAGE_THUMBNAIL_DIMENSIONS": getattr(settings, "JCROP_IMAGE_THUMBNAIL_DIMENSIONS", "62x62"),
-            "JCROP_IMAGE_WIDGET_DIMENSIONS": getattr(settings, "JCROP_IMAGE_WIDGET_DIMENSIONS", "320x320"),
+            "JCROP_IMAGE_THUMBNAIL_DIMENSIONS": getattr(
+                settings, "JCROP_IMAGE_THUMBNAIL_DIMENSIONS", "62x62"
+            ),
+            "JCROP_IMAGE_WIDGET_DIMENSIONS": getattr(
+                settings, "JCROP_IMAGE_WIDGET_DIMENSIONS", "320x320"
+            ),
         })
         c = Context(substitutions)
         return t.render(c)
@@ -106,6 +125,6 @@ class JCropImageField(models.ImageField):
 
     def formfield(self, **kwargs):
         defaults = kwargs
-        defaults.update({'form_class': forms.ImageField, 'widget': JCropAdminImageWidget})
+        defaults.update({'form_class': forms.ImageField,
+                         'widget': JCropAdminImageWidget})
         return super(JCropImageField, self).formfield(**defaults)
-

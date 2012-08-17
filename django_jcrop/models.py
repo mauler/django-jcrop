@@ -2,6 +2,13 @@
 #-*- coding:utf-8 -*-
 """Definition of JCropImageField with associated widget"""
 
+from PIL import Image
+from StringIO import StringIO
+try:
+    from json import loads
+except ImportError:
+    from simplejson import loads
+
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.files.storage import default_storage
@@ -13,14 +20,6 @@ from django.utils.html import escape, conditional_escape
 from django.utils.safestring import mark_safe
 from django import forms
 
-from PIL import Image
-from StringIO import StringIO
-
-try:
-    from json import loads
-except ImportError:
-    from simplejson import loads
-
 
 class ClearableFileInput(forms.ClearableFileInput):
 
@@ -29,12 +28,12 @@ class ClearableFileInput(forms.ClearableFileInput):
                                                      "%s-crop" % name):
             forig = default_storage.open(data['%s-original' % name])
             im = Image.open(forig)
-            w, h = im.size
+            width, height = im.size
             cdata = loads(data['%s-crop-data' % name])
-            xr = 1. * w / cdata['image_width']
-            yr = 1. * h / cdata['image_height']
-            box = (cdata['x'] * xr, cdata['y'] * yr,
-                   cdata['x2'] * xr, cdata['y2'] * yr)
+            x_ratio = 1. * width / int(cdata['image_width'])
+            y_ratio = 1. * height / int(cdata['image_height'])
+            box = (cdata['x'] * x_ratio, cdata['y'] * y_ratio,
+                   cdata['x2'] * x_ratio, cdata['y2'] * y_ratio)
             box = map(int, box)
             crop = im.crop(box)
             sio = StringIO()
@@ -84,8 +83,11 @@ class JCropAdminImageWidget(ClearableFileInput):
             'clear_checkbox_label': self.clear_checkbox_label,
         }
         template = u'%(input)s'
-        substitutions['input'] = super(forms.ClearableFileInput,
-                                       self).render(name, value, attrs)
+        substitutions['input'] = super(forms.ClearableFileInput, self).render(
+            name, value, attrs
+        )
+
+        print value
 
         if value and hasattr(value, "url"):
             template = self.template_with_initial
@@ -95,20 +97,20 @@ class JCropAdminImageWidget(ClearableFileInput):
             substitutions['initial'] = (u'<a href="%s">%s</a>'
                                         % (escape(value.url),
                                            escape(force_unicode(value))))
-            if not self.is_required:
-                checkbox_name = self.clear_checkbox_name(name)
-                checkbox_id = self.clear_checkbox_id(checkbox_name)
-                substitutions['clear_checkbox_name'] = conditional_escape(
-                    checkbox_name
-                )
-                substitutions['clear_checkbox_id'] = conditional_escape(
-                    checkbox_id
-                )
-                substitutions['clear'] = forms.CheckboxInput().render(
-                    checkbox_name, False, attrs={'id': checkbox_id}
-                )
-                substitutions['clear_template'] = self.template_with_clear % \
-                        substitutions
+            #if not self.is_required:
+            checkbox_name = self.clear_checkbox_name(name)
+            checkbox_id = self.clear_checkbox_id(checkbox_name)
+            substitutions['clear_checkbox_name'] = conditional_escape(
+                checkbox_name
+            )
+            substitutions['clear_checkbox_id'] = conditional_escape(
+                checkbox_id
+            )
+            substitutions['clear'] = forms.CheckboxInput().render(
+                checkbox_name, False, attrs={'id': checkbox_id}
+            )
+            substitutions['clear_template'] = self.template_with_clear % \
+                    substitutions
         else:
             return mark_safe(template % substitutions)
 

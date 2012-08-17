@@ -14,10 +14,10 @@
     };
     var crop = function() {
       $('#jcrop_target_{{ input_name }}').Jcrop({
-          aspectRatio: 0,
-          onChange: update_input,
-          onSelect: update_input
-      }, function(){
+        aspectRatio: 0,
+        onChange: update_input,
+        onSelect: update_input
+      }, function() {
         var bounds = this.getBounds();
         boundx = bounds[0];
         boundy = bounds[1];
@@ -32,11 +32,11 @@
           crop();
         }
       } else {
-        $(".jcrop_panel.{{ input_name }}").slideUp('fast')
+        $(".jcrop_panel.{{ input_name }}").slideUp('fast');
       }
-    })
-    $("#jcrop_crop_{{ input_name }}").change()
-  })
+    });
+    //$("#jcrop_crop_{{ input_name }}").change();
+  });
 })(jQuery)
 // ]]>
 </script>
@@ -59,7 +59,7 @@
          id="jcrop_target_{{ input_name }}" />
   </span><br />
   {% trans "Upload:" %}{{ input }}
-  <input type="hidden" name="{{ input_name }}-original" value="{{ image_value }}"  />
-  <input type="hidden" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
+  <input type="text" name="{{ input_name }}-original" value="{{ image_value }}"  />
+  <input type="text" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
 </div>
 

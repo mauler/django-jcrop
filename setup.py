@@ -16,7 +16,6 @@ setup(
     license='BSD',
     long_description=read('README'),
     install_requires=[
-        'simplejson',
         'easy_thumbnails',
     ],
     classifiers=[

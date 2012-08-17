@@ -15,7 +15,10 @@ from django import forms
 from PIL import Image
 from StringIO import StringIO
 
-from simplejson import loads
+try:
+    from json import loads
+except ImportError:
+    from simplejson import loads
 
 
 class ClearableFileInput(forms.ClearableFileInput):

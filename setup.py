@@ -7,7 +7,7 @@ setup(
     author='Mathieu Comandon',
     author_email='strider@strycore.com',
     url='https://github.com/strycore/django-jcrop',
-    packages=['django_crop'],
+    packages=['django_jcrop'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

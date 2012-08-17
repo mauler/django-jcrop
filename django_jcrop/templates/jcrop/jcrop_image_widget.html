@@ -41,11 +41,11 @@
 // ]]>
 </script>
 
+<input type="hidden" name="{{ input_name }}-original" value="{{ image_value }}"  />
+<input type="hidden" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
 <input name="{{ input_name }}-crop" type="checkbox" id="jcrop_crop_{{ input_name }}" />
 <label for="jcrop_crop_{{ input_name }}">{% trans "Crop" %}</label>
 <span class="{{ input_name }} jcrop_panel" style="display: none">
   <img src="{% thumbnail image_value JCROP_IMAGE_WIDGET_DIMENSIONS %}" 
        id="jcrop_target_{{ input_name }}" />
-</span><br />
-<input type="hidden" name="{{ input_name }}-original" value="{{ image_value }}"  />
-<input type="hidden" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
+</span>

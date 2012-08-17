@@ -38,12 +38,6 @@ class ClearableFileInput(forms.ClearableFileInput):
                 "image/%s" % im.format.lower(), size, "utf-8"
             )
             files[name] = f
-            print files[name]
-            print files[name]
-            print files[name]
-            print files[name]
-            print files[name]
-            print files[name]
 
         upload = super(ClearableFileInput, self).value_from_datadict(data,
                                                                      files,

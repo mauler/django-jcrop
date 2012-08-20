@@ -1,51 +1,33 @@
 {% load thumbnail i18n %}
 
-<script type="text/javascript" language="javascript" charset="utf-8">
-// <![CDATA[
-(function ($) {
-  $(function () {
-    var jcrop_api, boundx, boundy;
-    var update_input = function(c) {
-      $.extend(c, {
-        image_width: $('#jcrop_target_{{ input_name }}').width(),
-        image_height: $('#jcrop_target_{{ input_name }}').height()
-      })
-      $("#id_{{ input_name }}-crop-data").val(JSON.stringify(c))
-    };
-    var crop = function() {
-      $('#jcrop_target_{{ input_name }}').Jcrop({
-        aspectRatio: 0,
-        onChange: update_input,
-        onSelect: update_input
-      }, function() {
-        var bounds = this.getBounds();
-        boundx = bounds[0];
-        boundy = bounds[1];
-        jcrop_api = this;
-      });
-      update_input();
-    }
-    $("#jcrop_crop_{{ input_name }}").change(function () {
-      if ($(this).is(":checked")) {
-        $(".jcrop_panel.{{ input_name }}").slideDown('fast')
-        if (jcrop_api == null) {
-          crop();
-        }
-      } else {
-        $(".jcrop_panel.{{ input_name }}").slideUp('fast');
-      }
-    });
-    $("#jcrop_crop_{{ input_name }}").change();
-  });
-})(jQuery)
-// ]]>
-</script>
-
-<input type="hidden" name="{{ input_name }}-original" value="{{ image_value }}"  />
-<input type="hidden" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
-<input name="{{ input_name }}-crop" type="checkbox" id="jcrop_crop_{{ input_name }}" />
-<label for="jcrop_crop_{{ input_name }}">{% trans "Crop" %}</label>
-<span class="{{ input_name }} jcrop_panel" style="display: none">
-  <img src="{% thumbnail image_value JCROP_IMAGE_WIDGET_DIMENSIONS %}" 
-       id="jcrop_target_{{ input_name }}" />
+<input type="text" name="{{ input_name }}-original" value="{{ image_value }}"  />
+<input type="text" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
+<span class="{{ input_name }} jcrop_panel">
+  <img src="/media/{{ image_value }}" id="jcrop_target_{{ input_name }}" />
 </span>
+<script type="text/javascript" language="javascript">
+jQuery(document).ready(function() {
+(function ($) {
+  var jcrop_api, boundx, boundy;
+  var update_input = function(c) {
+    $.extend(c, {
+      image_width: $('#jcrop_target_{{ input_name }}').width(),
+      image_height: $('#jcrop_target_{{ input_name }}').height()
+    })
+    $("#id_{{ input_name }}-crop-data").val(JSON.stringify(c))
+  };
+
+  $('#jcrop_target_{{ input_name }}').Jcrop({
+    aspectRatio: 0,
+    onChange: update_input,
+    onSelect: update_input
+  }, function() {
+    var bounds = this.getBounds();
+    boundx = bounds[0];
+    boundy = bounds[1];
+    jcrop_api = this;
+  });
+  update_input();
+}(jQuery));
+});
+</script>

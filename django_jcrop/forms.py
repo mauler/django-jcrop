@@ -13,11 +13,16 @@ from django.template.loader import get_template
 from django import forms
 
 
-class ClearableFileInput(forms.ClearableFileInput):
+class JCropImageWidget(forms.ClearableFileInput):
+
+    class Media:
+        js = (settings.STATIC_URL + "django_jcrop/js/jquery.Jcrop.min.js",)
+        css = {"all": (
+            settings.STATIC_URL + "django_jcrop/css/jquery.Jcrop.css",
+        )}
 
     def value_from_datadict(self, data, files, name):
-        if forms.CheckboxInput().value_from_datadict(data, files,
-                                                     "%s-crop" % name):
+        if data["%s-crop-data" % name]:
             forig = default_storage.open(data['%s-original' % name])
             im = Image.open(forig)
             width, height = im.size
@@ -39,9 +44,9 @@ class ClearableFileInput(forms.ClearableFileInput):
             )
             files[name] = f
 
-        upload = super(ClearableFileInput, self).value_from_datadict(data,
-                                                                     files,
-                                                                     name)
+        upload = super(JCropImageWidget, self).value_from_datadict(data,
+                                                                        files,
+                                                                        name)
         if not self.is_required and forms.CheckboxInput().value_from_datadict(
             data, files, self.clear_checkbox_name(name)):
             if upload:
@@ -53,15 +58,6 @@ class ClearableFileInput(forms.ClearableFileInput):
             # as opposed to just None
             return False
         return upload
-
-
-class JCropAdminImageWidget(ClearableFileInput):
-
-    class Media:
-        js = (settings.STATIC_URL + "django_jcrop/js/jquery.Jcrop.min.js",)
-        css = {"all": (
-            settings.STATIC_URL + "django_jcrop/css/jquery.Jcrop.css",
-        )}
 
     def render(self, name, value, attrs=None):
         t = get_template("jcrop/jcrop_image_widget.html")
@@ -76,7 +72,7 @@ class JCropAdminImageWidget(ClearableFileInput):
             ),
         }
         c = Context(substitutions)
-        clearable_input_render = super(ClearableFileInput, self).render(
+        clearable_input_render = super(JCropImageWidget, self).render(
             name, value, attrs
         )
         return clearable_input_render + t.render(c)

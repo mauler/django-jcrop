@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
   };
 
   $('#jcrop_target_{{ input_name }}').Jcrop({
-    aspectRatio: 0,
+    aspectRatio: {{ ratio }},
     onChange: update_input,
     onSelect: update_input
   }, function() {

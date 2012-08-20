@@ -61,9 +61,14 @@ class JCropImageWidget(forms.ClearableFileInput):
 
     def render(self, name, value, attrs=None):
         t = get_template("jcrop/jcrop_image_widget.html")
+        if 'ratio' in attrs:
+            ratio = attrs.pop('ratio')
+        else:
+            ratio = '0'
         substitutions = {
             "input_name": name,
             "image_value": value,
+            "ratio": ratio,
             "JCROP_IMAGE_THUMBNAIL_DIMENSIONS": getattr(
                 settings, "JCROP_IMAGE_THUMBNAIL_DIMENSIONS", "62x62"
             ),

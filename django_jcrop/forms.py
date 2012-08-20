@@ -14,6 +14,13 @@ from django import forms
 
 
 class JCropImageWidget(forms.ClearableFileInput):
+    ratio = '0'
+
+    def __init__(self, *args, **kwargs):
+        if 'attrs' in kwargs:
+            if 'ratio' in kwargs['attrs']:
+                self.ratio = kwargs['attrs'].pop('ratio')
+        return super(JCropImageWidget, self).__init__(*args, **kwargs)
 
     class Media:
         js = (settings.STATIC_URL + "django_jcrop/js/jquery.Jcrop.min.js",)
@@ -61,14 +68,10 @@ class JCropImageWidget(forms.ClearableFileInput):
 
     def render(self, name, value, attrs=None):
         t = get_template("jcrop/jcrop_image_widget.html")
-        if 'ratio' in attrs:
-            ratio = attrs.pop('ratio')
-        else:
-            ratio = '0'
         substitutions = {
             "input_name": name,
             "image_value": value,
-            "ratio": ratio,
+            "ratio": self.ratio,
             "JCROP_IMAGE_THUMBNAIL_DIMENSIONS": getattr(
                 settings, "JCROP_IMAGE_THUMBNAIL_DIMENSIONS", "62x62"
             ),

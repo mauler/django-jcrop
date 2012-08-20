@@ -1,7 +1,7 @@
 {% load thumbnail i18n %}
 
-<input type="text" name="{{ input_name }}-original" value="{{ image_value }}"  />
-<input type="text" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
+<input type="hidden" name="{{ input_name }}-original" value="{{ image_value }}"  />
+<input type="hidden" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
 <span class="{{ input_name }} jcrop_panel">
   <img src="/media/{{ image_value }}" id="jcrop_target_{{ input_name }}" />
 </span>

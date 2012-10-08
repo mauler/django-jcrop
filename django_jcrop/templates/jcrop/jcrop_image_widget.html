@@ -20,7 +20,8 @@ jQuery(document).ready(function() {
   $('#jcrop_target_{{ input_name }}').Jcrop({
     aspectRatio: {{ ratio }},
     onChange: update_input,
-    onSelect: update_input
+    onSelect: update_input,
+    minSize: [ {% firstof min_x 1 %}, {% firstof min_y 1 %} ]
   }, function() {
     var bounds = this.getBounds();
     boundx = bounds[0];

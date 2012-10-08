@@ -34,6 +34,10 @@ class JCropImageWidget(forms.ClearableFileInput):
             im = Image.open(forig)
             width, height = im.size
             cdata = loads(data['%s-crop-data' % name])
+            if abs(cdata['x'] - cdata['x2']) < 1 or \
+               abs(cdata['y'] - cdata['y2']) < 1:
+                print cdata
+                return
             x_ratio = 1. * width / int(cdata['image_width'])
             y_ratio = 1. * height / int(cdata['image_height'])
             box = (cdata['x'] * x_ratio, cdata['y'] * y_ratio,

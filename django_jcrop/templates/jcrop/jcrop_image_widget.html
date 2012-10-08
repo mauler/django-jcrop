@@ -6,7 +6,6 @@
   <img src="/media/{{ image_value }}" id="jcrop_target_{{ input_name }}" />
 </span>
 <script type="text/javascript" language="javascript">
-jQuery(document).ready(function() {
 (function ($) {
   var jcrop_api, boundx, boundy;
   var update_input = function(c) {
@@ -29,6 +28,5 @@ jQuery(document).ready(function() {
     jcrop_api = this;
   });
   update_input();
-}(jQuery));
-});
+}({% firstof jquery_alias "jQuery" %}));
 </script>

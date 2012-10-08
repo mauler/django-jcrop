@@ -20,6 +20,11 @@ class JCropImageWidget(forms.ClearableFileInput):
         if 'attrs' in kwargs:
             if 'ratio' in kwargs['attrs']:
                 self.ratio = kwargs['attrs'].pop('ratio')
+            if 'jquery_alias' in kwargs['attrs']:
+                self.jquery_alias = kwargs['attrs'].pop('jquery_alias')
+            else:
+                self.jquery_alias = None
+
         return super(JCropImageWidget, self).__init__(*args, **kwargs)
 
     class Media:
@@ -76,6 +81,7 @@ class JCropImageWidget(forms.ClearableFileInput):
             "input_name": name,
             "image_value": value,
             "ratio": self.ratio,
+            "jquery_alias": self.jquery_alias,
             "JCROP_IMAGE_THUMBNAIL_DIMENSIONS": getattr(
                 settings, "JCROP_IMAGE_THUMBNAIL_DIMENSIONS", "62x62"
             ),

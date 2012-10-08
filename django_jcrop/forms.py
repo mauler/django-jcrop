@@ -15,6 +15,7 @@ from django import forms
 
 class JCropImageWidget(forms.ClearableFileInput):
     ratio = '0'
+    jquery_alias = None
 
     def __init__(self, *args, **kwargs):
         if 'attrs' in kwargs:
@@ -22,8 +23,6 @@ class JCropImageWidget(forms.ClearableFileInput):
                 self.ratio = kwargs['attrs'].pop('ratio')
             if 'jquery_alias' in kwargs['attrs']:
                 self.jquery_alias = kwargs['attrs'].pop('jquery_alias')
-            else:
-                self.jquery_alias = None
 
         return super(JCropImageWidget, self).__init__(*args, **kwargs)
 

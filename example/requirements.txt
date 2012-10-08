@@ -1,0 +1,3 @@
+Django
+Pillow
+sorl-thumbnail

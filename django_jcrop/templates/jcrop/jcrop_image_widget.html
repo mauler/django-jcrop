@@ -7,28 +7,52 @@
   <img src="{{ MEDIA_URL }}{{ image_value }}" id="jcrop_target_{{ input_name }}" />
   {% endif %}
 </span>
+<div class='preview-pane'>
+{% thumbnail image_value "200x200" as thumb %}
+  <img src="{{ MEDIA_URL }}{{ thumb }}" alt="" id="jcrop_preview_{{ input_name }}"/>
+{% endthumbnail %}
+
 <script type="text/javascript" language="javascript">
 (function ($) {
-  var jcrop_api, boundx, boundy;
-  var update_input = function(c) {
-    $.extend(c, {
-      image_width: $('#jcrop_target_{{ input_name }}').width(),
-      image_height: $('#jcrop_target_{{ input_name }}').height()
-    })
-    $("#id_{{ input_name }}-crop-data").val(JSON.stringify(c))
-  };
+    var jcrop_api, boundx, boundy;
 
-  $('#jcrop_target_{{ input_name }}').Jcrop({
-    aspectRatio: {{ ratio }},
-    onChange: update_input,
-    onSelect: update_input,
-    minSize: [ {% firstof min_x 1 %}, {% firstof min_y 1 %} ]
-  }, function() {
-    var bounds = this.getBounds();
-    boundx = bounds[0];
-    boundy = bounds[1];
-    jcrop_api = this;
-  });
-  update_input();
+    var update_input = function(c) {
+        $.extend(c, {
+            image_width: $('#jcrop_target_{{ input_name }}').width(),
+            image_height: $('#jcrop_target_{{ input_name }}').height()
+        })
+        $("#id_{{ input_name }}-crop-data").val(JSON.stringify(c))
+    };
+
+    var update_preview = function(c)
+    {
+        var $preview_img = $("#jcrop_preview_pane_{{ input_name }}"),
+            $preview_pane = $("#jcrop_preview_pane_{{ input_name }}").parent();
+        xsize = $preview_pane.width();
+        ysize = $preview_pane.height();
+        if (parseInt(c.w) > 0) {
+            var rx = xsize / c.w;
+            var ry = ysize / c.h;
+            $preview_img.css({
+                width: Math.round(rx * boundx) + 'px',
+                height: Math.round(ry * boundy) + 'px',
+                marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                marginTop: '-' + Math.round(ry * c.y) + 'px'
+            });
+        }
+    };
+
+    $('#jcrop_target_{{ input_name }}').Jcrop({
+        aspectRatio: {{ ratio }},
+        onChange: update_input,
+        onSelect: update_input,
+        minSize: [ {% firstof min_x 1 %}, {% firstof min_y 1 %} ]
+    }, function() {
+        var bounds = this.getBounds();
+        boundx = bounds[0];
+        boundy = bounds[1];
+        jcrop_api = this;
+    });
+    update_input();
 }({% firstof jquery_alias "jQuery" %}));
 </script>

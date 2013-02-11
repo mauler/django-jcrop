@@ -30,6 +30,7 @@ class JCropImageWidget(forms.ClearableFileInput):
         js = (settings.STATIC_URL + "django_jcrop/js/jquery.Jcrop.min.js",)
         css = {"all": (
             settings.STATIC_URL + "django_jcrop/css/jquery.Jcrop.css",
+            settings.STATIC_URL + "django_jcrop/css/jcrop-widget.css"
         )}
 
     def value_from_datadict(self, data, files, name):
@@ -59,7 +60,7 @@ class JCropImageWidget(forms.ClearableFileInput):
                                                                    files,
                                                                    name)
         if not self.is_required and forms.CheckboxInput().value_from_datadict(
-            data, files, self.clear_checkbox_name(name)):
+        data, files, self.clear_checkbox_name(name)):
             if upload:
                 # If the user contradicts themselves (uploads a new file AND
                 # checks the "clear" checkbox), we return a unique marker

@@ -1,9 +1,9 @@
 from PIL import Image
 from StringIO import StringIO
 try:
-    from json import loads
+    import json
 except ImportError:
-    from simplejson import loads
+    import simplejson as json
 
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -37,11 +37,7 @@ class JCropImageWidget(forms.ClearableFileInput):
             forig = default_storage.open(data['%s-original' % name])
             im = Image.open(forig)
             width, height = im.size
-            cdata = loads(data['%s-crop-data' % name])
-            if abs(cdata['x'] - cdata['x2']) < 1 or \
-               abs(cdata['y'] - cdata['y2']) < 1:
-                print cdata
-                return
+            cdata = json.loads(data['%s-crop-data' % name])
             x_ratio = 1. * width / int(cdata['image_width'])
             y_ratio = 1. * height / int(cdata['image_height'])
             box = (cdata['x'] * x_ratio, cdata['y'] * y_ratio,

@@ -7,6 +7,5 @@ from models import ExampleModel
 class ExampleForm(forms.ModelForm):
     image = forms.ImageField(widget=JCropImageWidget)
 
-
     class Meta:
         model = ExampleModel

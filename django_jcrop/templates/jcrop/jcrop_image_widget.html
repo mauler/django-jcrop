@@ -3,7 +3,9 @@
 <input type="hidden" name="{{ input_name }}-original" value="{{ image_value }}"  />
 <input type="hidden" name="{{ input_name }}-crop-data" id="id_{{ input_name }}-crop-data"  />
 <span class="{{ input_name }} jcrop_panel">
+  {% if image_value %} 
   <img src="/media/{{ image_value }}" id="jcrop_target_{{ input_name }}" />
+  {% endif %}
 </span>
 <script type="text/javascript" language="javascript">
 (function ($) {

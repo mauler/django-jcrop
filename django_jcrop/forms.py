@@ -60,8 +60,8 @@ class JCropImageWidget(forms.ClearableFileInput):
             files[name] = f
 
         upload = super(JCropImageWidget, self).value_from_datadict(data,
-                                                                        files,
-                                                                        name)
+                                                                   files,
+                                                                   name)
         if not self.is_required and forms.CheckboxInput().value_from_datadict(
             data, files, self.clear_checkbox_name(name)):
             if upload:

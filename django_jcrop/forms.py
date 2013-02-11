@@ -77,6 +77,7 @@ class JCropImageWidget(forms.ClearableFileInput):
             "image_value": value,
             "ratio": self.ratio,
             "jquery_alias": self.jquery_alias,
+            "MEDIA_URL": settings.MEDIA_URL,
             "JCROP_IMAGE_THUMBNAIL_DIMENSIONS": getattr(
                 settings, "JCROP_IMAGE_THUMBNAIL_DIMENSIONS", "62x62"
             ),

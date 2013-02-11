@@ -2,4 +2,4 @@ dist
 *.pyc
 MANIFEST
 example/dev.db
-example/media/images/*
+example/media/*

@@ -28,7 +28,6 @@ class JCropImageWidget(forms.ClearableFileInput):
 
     class Media:
         js = (
-            settings.STATIC_URL + "django_jcrop/js/jquery-1.9.0.min.js",
             settings.STATIC_URL + "django_jcrop/js/jquery.Jcrop.min.js",
         )
         css = {"all": (

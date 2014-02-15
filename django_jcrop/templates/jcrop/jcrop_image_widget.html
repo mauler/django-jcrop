@@ -7,10 +7,10 @@
   <img src="{{ MEDIA_URL }}{{ image_value }}" id="jcrop_target_{{ input_name }}" />
   {% endif %}
 </span>
-<div class='preview-pane'>
+<div class='preview-pane' style="width:200px;height:200px;overflow:hidden;">
 {% thumbnail image_value "200x200" as thumb %}
   <img src="{{ MEDIA_URL }}{{ thumb }}" alt="" id="jcrop_preview_{{ input_name }}"/>
-{% endthumbnail %}
+</div>
 
 <script type="text/javascript" language="javascript">
 (function ($) {
@@ -26,8 +26,8 @@
 
     var update_preview = function(c)
     {
-        var $preview_img = $("#jcrop_preview_pane_{{ input_name }}"),
-            $preview_pane = $("#jcrop_preview_pane_{{ input_name }}").parent();
+        var $preview_img = $("#jcrop_preview_{{ input_name }}"),
+            $preview_pane = $("#jcrop_preview_{{ input_name }}").parent();
         xsize = $preview_pane.width();
         ysize = $preview_pane.height();
         if (parseInt(c.w) > 0) {
@@ -44,7 +44,7 @@
 
     $('#jcrop_target_{{ input_name }}').Jcrop({
         aspectRatio: {{ ratio }},
-        onChange: update_input,
+        onChange: update_preview,
         onSelect: update_input,
         minSize: [ {% firstof min_x 1 %}, {% firstof min_y 1 %} ]
     }, function() {

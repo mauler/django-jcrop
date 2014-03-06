@@ -4,7 +4,7 @@
 from django.db import models
 from django import forms
 
-from .forms import JCropAdminImageWidget
+from .forms import JCropImageWidget as JCropAdminImageWidget
 
 
 class JCropImageField(models.ImageField):

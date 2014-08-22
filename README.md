@@ -1,4 +1,13 @@
 # django-jcrop
+
+[![Test Status](https://travis-ci.org/mauler/jcrop.png?branch=master)](https://travis-ci.org/mauler/jcrop)
+
+[![Code Health](https://landscape.io/github/mauler/jcrop/master/landscape.png)](https://landscape.io/github/mauler/jcrop/master)
+
+[![Latest PyPI version](https://pypip.in/v/jcrop/badge.png)](https://crate.io/packages/jcrop/)
+
+[![Number of PyPI downloads](https://pypip.in/d/jcrop/badge.png)](https://crate.io/packages/jcrop/)
+
 This a prototype, the code is working but not ideally (black magic present).
 
 Installation

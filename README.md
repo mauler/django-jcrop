@@ -4,9 +4,9 @@
 
 [![Code Health](https://landscape.io/github/mauler/django-jcrop/master/landscape.png)](https://landscape.io/github/mauler/django-jcrop/master)
 
-[![Latest PyPI version](https://pypip.in/v/django-jcrop/badge.png)](https://crate.io/packages/django-jcrop/)
+[![Latest PyPI version](https://img.shields.io/pypi/v/django-jcrop.svg)](https://crate.io/packages/django-jcrop/)
 
-[![Number of PyPI downloads](https://pypip.in/d/django-jcrop/badge.png)](https://crate.io/packages/django-jcrop/)
+[![Number of PyPI downloads](https://img.shields.io/pypi/dm/django-jcrop.svg)](https://crate.io/packages/django-jcrop/)
 
 
 This a prototype, the code is working but not ideally (black magic present).
